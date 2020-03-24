@@ -50,15 +50,22 @@ RACK_ENV=production" > <PATH_TO_APISONATOR_ENV_FILE>
 ## Run
 
 The instructions below will run:
-- [3scale/apisonator](https://github.com/3scale/apisonator) in a docker (listening to port 3001)
+- [3scale/apisonator](https://github.com/3scale/apisonator) in a docker (listerner attending to port 3001 and worker)
 - [3scale/porta](https://github.com/3scale/porta) Rails server in local environment (at port 3000)
 - [3scale/porta](https://github.com/3scale/porta) Sidekiq processes in local environment
 - Porxy in a docker (listening to port 3008)
 - Staging [3scale/APIcast](https://github.com/3scale/APIcast) (listening to port 8080)
 
 ### Run 3scale/apisonator in a docker
+
+#### Listener
 ```
 docker run -d --name apisonator --rm -p 3001:3001 --env-file <PATH_TO_APISONATOR_ENV_FILE> -it quay.io/3scale/apisonator:latest 3scale_backend start -p 3001 -l /var/log/backend/3scale_backend.log
+```
+
+#### Worker
+```
+docker run -d --name apisonator_worker --rm --env-file <PATH_TO_APISONATOR_ENV_FILE> -it quay.io/3scale/apisonator:latest 3scale_backend_worker run
 ```
 
 ### Run 3scale/porta locally
