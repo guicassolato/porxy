@@ -27,7 +27,6 @@ Consider the following general parameters for the [Setup](#setup) and [Run](#run
 | ----------|-------------|
 | `<APICAST_ACCESS_TOKEN>` | 3scale/APIcast special access token to access 3scale/Porta's Master API |
 | `<PATH_TO_APISONATOR_ENV_FILE>` | Path to an env file to be used by 3scale/apisonator. |
-| `<DOCKER_HOST_IP>` | IP of the host machine where dokcer is running, e.g. 192.168.65.2. |
 
 ## Setup
 
@@ -83,11 +82,11 @@ DEV_GTLD=local RAILS_MAX_THREADS=5 bundle exec rails sidekiq
 ### Run Porxy in a docker
 
 ```
-docker run -d --name porxy --rm --add-host=master-account.example.com.local:<DOCKER_HOST_IP> -p 3008:3008 quay.io/guicassolato/porxy:latest
+docker run -d --name porxy --rm -p 3008:3008 quay.io/guicassolato/porxy:latest
 ```
 
 ### Run 3scale/APIcast in a docker
 
 ```
-docker run -d --name apicast --rm -p 8080:8080 -e THREESCALE_PORTAL_ENDPOINT="http://<APICAST_ACCESS_TOKEN>@host.docker.internal:3008/master/api/proxy/configs" -e THREESCALE_DEPLOYMENT_ENV=staging -e BACKEND_ENDPOINT_OVERRIDE="http://<DOCKER_HOST_IP>:3001" quay.io/3scale/apicast:master
+docker run -d --name apicast --rm -p 8080:8080 -e THREESCALE_PORTAL_ENDPOINT="http://<APICAST_ACCESS_TOKEN>@host.docker.internal:3008/master/api/proxy/configs" -e THREESCALE_DEPLOYMENT_ENV=staging -e BACKEND_ENDPOINT_OVERRIDE="http://host.docker.internal:3001" quay.io/3scale/apicast:master
 ```
